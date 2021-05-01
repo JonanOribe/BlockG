@@ -1,0 +1,8 @@
+{
+  "name": "Block5G",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "bb48d2f4"
+}
