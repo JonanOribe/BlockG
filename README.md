@@ -8,5 +8,5 @@
 <li>Lanzamos los tests con <b>Blablabla</b></li>
 <h3>:rocket: Lanzamos el proyecto con:</h3>
 <li><b>ionic serve</b></li>
-
-![alt text](https://github.com/JonanOribe/BlockG/blob/[main]/docs/BlockG.png?raw=true)
+<h3>:blue_book: Diagrama del proyecto:</h3>
+![alt text](https://github.com/JonanOribe/BlockG/blob/main/docs/BlockG.png?raw=true)
