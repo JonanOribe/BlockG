@@ -1,5 +1,6 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { ToastController, LoadingController, Platform } from '@ionic/angular';
+import {HttpClient} from "@angular/common/http";
 import jsQR from 'jsqr';
  
 @Component({
@@ -18,11 +19,13 @@ export class HomePage {
   scanActive = false;
   scanResult = null;
   loading: HTMLIonLoadingElement = null;
- 
+  url: any="";
+
   constructor(
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
-    private plt: Platform
+    private plt: Platform,
+    private http: HttpClient
   ) {
     const isInStandaloneMode = () =>
       'standalone' in window.navigator && window.navigator['standalone'];
@@ -148,5 +151,10 @@ export class HomePage {
       }
     };
     img.src = URL.createObjectURL(file);
+  }
+
+  sendCode(){
+  console.log(this.url, this.scanResult);
+  return this.http.post(this.url, this.scanResult); //TODO
   }
 }
