@@ -129,9 +129,9 @@ contract Qr {
     
     
     
-    function isIn(address asistente) private view returns (bool) {
+    function isIn(address assadd) private view returns (bool) {
       
-        string memory _nombre = asistente[asistente].nombre;
+        string memory _nombre = asistente[assadd].nombre;
         
         bytes memory b = bytes(_nombre);
         
