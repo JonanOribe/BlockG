@@ -1,0 +1,10 @@
+{
+    "name": "202105-Orange5G",
+    "version": "2.0.0",
+    "dependencies": {
+        "body-parser": "^1.5.1",
+        "express": "^4.7.1",
+        "method-override": "^2.1.2",
+        "web3": "^1.3.6"
+    }
+}
