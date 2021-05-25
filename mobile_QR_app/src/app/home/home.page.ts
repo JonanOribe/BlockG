@@ -161,6 +161,6 @@ export class HomePage {
 
   sendCode(){
   console.log(this.url, this.scanResult);
-  return this.http.post(this.url, this.scanResult, this.options).subscribe(); //TODO
+  return this.http.post(this.url, this.scanResult, this.options).subscribe();
   }
 }
