@@ -29,7 +29,8 @@ export class HomePage {
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
     private plt: Platform,
-    private http: HttpClient
+    private http: HttpClient,
+    public toastController: ToastController
   ) {
     const isInStandaloneMode = () =>
       'standalone' in window.navigator && window.navigator['standalone'];
@@ -45,25 +46,30 @@ export class HomePage {
     this.videoElement = this.video.nativeElement;
   }
  
-  // Helper functions
-  async showQrToast() {
-    /*
-    const toast = await this.toastCtrl.create({
-      message: `Open ${this.scanResult}?`,
-      position: 'top',
-      buttons: [
-        {
-          text: 'Open',
-          handler: () => {
-            window.open(this.scanResult, '_system', 'location=yes');
-          }
-        }
-      ]
+  async presentToast(response) {
+    let toast;
+    if(response=="GREEN"){
+    toast = await this.toastController.create({
+      message: 'Registro completado con ÉXITO',
+      duration: 2000,
+      color:"success"
     });
+    }else if(response=="RED"){
+    toast = await this.toastController.create({
+      message: 'AVISO!! Ya estas registrado al evento',
+      duration: 2000,
+      color:"warning"
+    });
+    }else{
+    toast = await this.toastController.create({
+      message: 'ERROR!! Fallo en el servicio',
+      duration: 2000,
+      color:"danger"
+    });
+    }
     toast.present();
-    */
   }
- 
+
   reset() {
     this.scanResult = null;
   }
@@ -120,7 +126,6 @@ export class HomePage {
       if (code) {
         this.scanActive = false;
         this.scanResult = code.data;
-        this.showQrToast();
       } else {
         if (this.scanActive) {
           requestAnimationFrame(this.scan.bind(this));
@@ -153,14 +158,18 @@ export class HomePage {
    
       if (code) {
         this.scanResult = code.data;
-        this.showQrToast();
       }
     };
     img.src = URL.createObjectURL(file);
   }
 
   sendCode(){
+  this.scanResult=JSON.parse(this.scanResult);
+  this.scanResult.myMail="ECarbajo@gmail.com";
+  this.scanResult.myAddress="0x525252E697cbe424c2CF6B2252d09e512ebe6e82";
+  this.scanResult=JSON.stringify(this.scanResult);
   console.log(this.url, this.scanResult);
-  return this.http.post(this.url, this.scanResult, this.options).subscribe();
+  let response=this.http.post(this.url, this.scanResult, this.options).subscribe();
+  this.presentToast(response);
   }
 }
