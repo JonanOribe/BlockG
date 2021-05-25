@@ -1,6 +1,6 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { ToastController, LoadingController, Platform } from '@ionic/angular';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import jsQR from 'jsqr';
  
 @Component({
@@ -19,7 +19,11 @@ export class HomePage {
   scanActive = false;
   scanResult = null;
   loading: HTMLIonLoadingElement = null;
-  url: any="";
+  url: any="http://localhost:3000/requestTicket";
+
+  headers = new HttpHeaders({
+    'Content-Type': 'application/json'});
+  options = { headers: this.headers };
 
   constructor(
     private toastCtrl: ToastController,
@@ -43,6 +47,7 @@ export class HomePage {
  
   // Helper functions
   async showQrToast() {
+    /*
     const toast = await this.toastCtrl.create({
       message: `Open ${this.scanResult}?`,
       position: 'top',
@@ -56,6 +61,7 @@ export class HomePage {
       ]
     });
     toast.present();
+    */
   }
  
   reset() {
@@ -155,6 +161,6 @@ export class HomePage {
 
   sendCode(){
   console.log(this.url, this.scanResult);
-  return this.http.post(this.url, this.scanResult); //TODO
+  return this.http.post(this.url, this.scanResult, this.options).subscribe(); //TODO
   }
 }

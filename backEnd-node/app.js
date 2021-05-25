@@ -3,6 +3,9 @@ var express = require("express"),
   bodyParser = require("body-parser"),
   methodOverride = require("method-override");
 
+var cors = require('cors');
+app.use(cors());
+
 /*const Web3 = require("web3");
 const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
 const NameContractABI = [{"constant": false,"inputs": [{"name": "newName","type": "string"}],"name": "setName","outputs": [],"payable": false,"stateMutability": "nonpayable","type": "function"},{"constant": true,"inputs": [],"name": "getName","outputs": [{"name": "","type": "string"}],"payable": false,"stateMutability": "view","type": "function"}]
