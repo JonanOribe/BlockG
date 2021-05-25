@@ -7,8 +7,8 @@
 <h3>:mag_right: Testing</h3>
 <li>Lanzamos los tests con <b>Blablabla</b></li>
 <h3>:rocket: Lanzamos el proyecto con:</h3>
-<li>Para la versión móvil <b>ng serve</b> en mobile_QR_app</li>
-<li>Para el BackEnd <b>node app.js</b> en backEnd-node</li>
+<li>Para la versión móvil: <b>ng serve</b> en mobile_QR_app</li>
+<li>Para el BackEnd: <b>node app.js</b> en backEnd-node</li>
 <h3>:blue_book: Diagrama del proyecto:</h3>
 
 ![alt text](https://github.com/JonanOribe/BlockG/blob/main/docs/BlockG.png?raw=true)
