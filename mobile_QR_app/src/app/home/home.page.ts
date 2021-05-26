@@ -24,6 +24,7 @@ export class HomePage {
   headers = new HttpHeaders({
     'Content-Type': 'application/json'});
   options = { headers: this.headers };
+  responseForToast: any;
 
   constructor(
     private toastCtrl: ToastController,
@@ -48,13 +49,14 @@ export class HomePage {
  
   async presentToast(response) {
     let toast;
+    console.log(response)
     if(response=="GREEN"){
     toast = await this.toastController.create({
       message: 'Registro completado con ÉXITO',
       duration: 2000,
       color:"success"
     });
-    }else if(response=="RED"){
+    }else if(response=="YELLOW"){
     toast = await this.toastController.create({
       message: 'AVISO!! Ya estas registrado al evento',
       duration: 2000,
@@ -168,8 +170,10 @@ export class HomePage {
   this.scanResult.myMail="ECarbajo@gmail.com";
   this.scanResult.myAddress="0x525252E697cbe424c2CF6B2252d09e512ebe6e82";
   this.scanResult=JSON.stringify(this.scanResult);
-  console.log(this.url, this.scanResult);
-  let response=this.http.post(this.url, this.scanResult, this.options).subscribe();
-  this.presentToast(response);
+
+  this.http.post(this.url, this.scanResult, this.options).subscribe(data => {
+    this.responseForToast=data;
+    this.presentToast(this.responseForToast);
+  });
   }
 }
