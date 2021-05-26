@@ -9,12 +9,13 @@ pragma solidity ^0.7.6;
  *  - Es muy basico quiza falta algun metodo mas
  */
 contract Qr {
+    bool locked = false;
     
     /**
      * address del admin que ha desplegado el contrato.
      * El contrato lo despliega el admin.
      */
-    address public admin;
+    address payable public admin;
     
     /// Nombre de la evento
     string public nombre;
@@ -23,19 +24,23 @@ contract Qr {
     uint public fecha;
     
     
+    // Precio
+    uint public cost;
+    
     /**
      * Datos de una Evento.
-     */
+     
     struct Evento {
         string nombre;
         uint fecha;
+        uint cost;
         
     }
     
     
     /// Eventos.
     Evento[] public eventos;
-
+*/
 
     /// Datos de un Asistente.
     struct Asistente {
@@ -45,11 +50,11 @@ contract Qr {
     
     
     /// Acceder a los datos de un asistente dada su direccion.
-    mapping (address => Asistente) public asistente;
+    mapping (address  => Asistente) public asistente;
     
     
     // Array con las direcciones de los asistentes.
-    address[] public asistentes;
+    address payable[] public asistentes;
     
     
     /// Tipos de acceso: presente, presente con permisos y admin.
@@ -62,31 +67,34 @@ contract Qr {
      * @param _nombre Nombre del evento.
      * @param _fecha  Fecha del evento.
      */
-    constructor(string memory _nombre, uint  _fecha) {
+    constructor(string memory _nombre, uint  _fecha, uint _cost) {
         
         bytes memory bn = bytes(_nombre);
         require(bn.length != 0, "El nombre del evento no puede ser vacio");
-       
-        
         require(_fecha != 0, "La fecha del evento no puede estar vacio");
+        require(_cost != 0 || _cost == 0, "El coste del evento no puede estar vacio");
       
-        admin = msg.sender;
+        admin = payable(msg.sender);
         fecha = _fecha;
         nombre = _nombre;
+        cost = _cost;
         
         
     }
+    
+      /**
      
-    function creaEvento(string memory _nombre, uint _fecha) soloAdmin public returns (uint) {
+   
+    function creaEvento(string memory _nombre, uint _fecha, uint _cost) soloAdmin public returns (uint) {
         
         bytes memory bn = bytes(_nombre);
         require(bn.length != 0, "El nombre del evento no puede ser vacio");
-        
         require(_fecha != 0, "la fecha del evento no puede estar vacio");
-        eventos.push(Evento(_nombre, _fecha));
+        require(_cost != 0 || _cost == 0, "El coste del evento no puede estar vacio");
+        eventos.push(Evento(_nombre, _fecha, _cost));
         return eventos.length - 1;
     }
-    
+      */
  
      /**
      * El numero de  asistentes.
@@ -106,15 +114,18 @@ contract Qr {
      * @param _nombre El nombre del asistente. 
      * @param _email  El email del asistente.
      */
-    function compraEntrada(string memory _nombre, string memory _email) noAsistentes public {
+    function compraEntrada(string memory _nombre, string memory _email) noAsistentes public payable {
         
-        bytes memory b = bytes(_nombre);
+        require(!locked, "Reentrant call detected!");
+        locked = true;
+        (bool success,) = admin.call{value: cost}("");
+        require(success, "Failed to send Ether");
+        locked = false;
+        
+        bytes memory b = bytes(_nombre); 
         require(b.length != 0, "El nombre no puede ser vacio");
-        
         Asistente memory datos = Asistente(_nombre, _email);
-        
         asistente[msg.sender] = datos;
-        
         asistentes.push(msg.sender);
         
     }
@@ -128,16 +139,18 @@ contract Qr {
     }
     
     
-    
+    /**
+     * Modificador para que una funcion solo la pueda ejecutar alguien asistente.
+     */
     function isIn(address assadd) private view returns (bool) {
       
         string memory _nombre = asistente[assadd].nombre;
-        
         bytes memory b = bytes(_nombre);
-        
         return b.length != 0;
     } 
-   
+   function getBalance( ) public view returns(uint256){
+        return admin.balance;
+    }
    
    
     modifier soloAdmin() {
@@ -166,11 +179,14 @@ contract Qr {
         _;
     }
     
+   
     
     /**
      * No se permite la recepcion de dinero.
-     */
+   
+      */
     receive() external payable {
-        revert("No se permite la recepcion de dinero.");
+        revert("Se permite la recepcion de dinero.");
     }
+    
 }
