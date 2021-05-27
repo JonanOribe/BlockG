@@ -18,6 +18,7 @@ export class HomePage {
   canvasContext: any;
   scanActive = false;
   scanResult = null;
+  user_address = null;
   loading: HTMLIonLoadingElement = null;
   url: any="http://localhost:3000/";
 
@@ -45,6 +46,7 @@ export class HomePage {
     this.canvasElement = this.canvas.nativeElement;
     this.canvasContext = this.canvasElement.getContext('2d');
     this.videoElement = this.video.nativeElement;
+    this.requestNewAccount();
   }
  
   async presentToast(response) {
@@ -179,9 +181,12 @@ export class HomePage {
   }
 
   requestNewAccount(){
+    let json_pass= {
+      "password" : "!@superpassword"
+      }
     let route='requestNewAccount';
-    this.http.post(this.url+route, this.options).subscribe(data => {
-      console.log(data);
+    this.http.post(this.url+route,json_pass, this.options).subscribe(data => {
+     this.user_address=data["address"];
     });
   }
 }
