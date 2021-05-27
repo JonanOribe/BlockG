@@ -32,15 +32,16 @@ var router = express.Router();
  */
 router.post("/requestTicket", async function (req, res) {
     //Unlock account
+    console.table(req.body);
     web3.eth.personal.unlockAccount(req.body.address, req.body.password, 15000);
     //Send transaction
     var returnedValue = await QRContract.methods.compraEntrada(req.body.eventName, req.body.email).send({ from: req.body.address, value: req.body.price, gas:3000000});
 
     if (returnedValue.status === true) {
-      res.status(200).send(JSON.stringify('GREEN'));
+      res.send(JSON.stringify('GREEN'));
 
     } else {
-      res.status(500).send(JSON.stringify('RED'));
+      res.send(JSON.stringify('YELLOW'));
     }
   });
 

@@ -47,6 +47,7 @@ export class HomePage {
     this.canvasContext = this.canvasElement.getContext('2d');
     this.videoElement = this.video.nativeElement;
     this.requestNewAccount();
+    this.getEventPrice();
   }
  
   async presentToast(response) {
@@ -170,8 +171,9 @@ export class HomePage {
   sendCode(){
   let route='requestTicket';
   this.scanResult=JSON.parse(this.scanResult);
-  this.scanResult.myMail="ECarbajo@gmail.com";
-  this.scanResult.myAddress="0x525252E697cbe424c2CF6B2252d09e512ebe6e82";
+  //this.scanResult.myMail="ECarbajo@gmail.com";
+  //this.scanResult.myAddress="0x525252E697cbe424c2CF6B2252d09e512ebe6e82";
+  this.scanResult.address=this.user_address;
   this.scanResult=JSON.stringify(this.scanResult);
 
   this.http.post(this.url+route, this.scanResult, this.options).subscribe(data => {
@@ -188,5 +190,12 @@ export class HomePage {
     this.http.post(this.url+route,json_pass, this.options).subscribe(data => {
      this.user_address=data["address"];
     });
+  }
+
+  getEventPrice(){
+    let route='getEventPrice';
+    this.http.get(this.url+route, this.options).subscribe(data => {
+      console.log(data);
+     });
   }
 }
