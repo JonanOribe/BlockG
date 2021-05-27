@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title>
-      <i><ion-icon slot="start" name="git-merge"></ion-icon>BlockG QR Scanner</i>
+      <i><ion-icon slot="start" name="git-merge"></ion-icon>BlockG QR Escaner</i>
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -9,21 +9,25 @@
 <ion-content>
   <!-- Fallback for iOS PWA -->
   <input #fileinput type="file" accept="image/*;capture=camera" hidden (change)="handleFile($event.target.files)">
- 
+   <!-- Trigger the file input -->
+   <ion-button expand="full" (click)="requestNewAccount()">
+    <ion-icon slot="start" name="logo-codepen"></ion-icon>
+    Solicitar nueva cuenta
+  </ion-button>
   <!-- Trigger the file input -->
   <ion-button expand="full" (click)="captureImage()">
     <ion-icon slot="start" name="camera"></ion-icon>
-    Capture Image
+    Capturar código
   </ion-button>
  
   <ion-button expand="full" (click)="startScan()">
     <ion-icon slot="start" name="qr-scanner"></ion-icon>
-    Start scan
+    Comenzar escaneo
   </ion-button>
  
   <ion-button expand="full" (click)="reset()" color="warning" *ngIf="scanResult">
     <ion-icon slot="start" name="refresh"></ion-icon>
-    Reset
+    Reinicio
   </ion-button>
  
   <!-- Shows our camera stream -->
@@ -35,12 +39,12 @@
   <!-- Stop our scanner preview if active -->
   <ion-button expand="full" (click)="stopScan()" color="danger" *ngIf="scanActive">
     <ion-icon slot="start" name="close"></ion-icon>
-    Stop scan
+    Parar escaneo
   </ion-button>
  
   <ion-card *ngIf="scanResult">
     <ion-card-header>
-      <ion-card-title>QR Code</ion-card-title>
+      <ion-card-title>Código QR</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       {{scanResult}}
@@ -48,7 +52,7 @@
         <!-- Trigger send QR code to Ganache -->
         <ion-button expand="full" (click)="sendCode()">
           <ion-icon slot="start" name="send"></ion-icon>
-          Send Code
+          Enviar código
         </ion-button>
   </ion-card>
 </ion-content>

@@ -19,7 +19,7 @@ export class HomePage {
   scanActive = false;
   scanResult = null;
   loading: HTMLIonLoadingElement = null;
-  url: any="http://localhost:3000/requestTicket";
+  url: any="http://localhost:3000/";
 
   headers = new HttpHeaders({
     'Content-Type': 'application/json'});
@@ -166,14 +166,22 @@ export class HomePage {
   }
 
   sendCode(){
+  let route='requestTicket';
   this.scanResult=JSON.parse(this.scanResult);
   this.scanResult.myMail="ECarbajo@gmail.com";
   this.scanResult.myAddress="0x525252E697cbe424c2CF6B2252d09e512ebe6e82";
   this.scanResult=JSON.stringify(this.scanResult);
 
-  this.http.post(this.url, this.scanResult, this.options).subscribe(data => {
+  this.http.post(this.url+route, this.scanResult, this.options).subscribe(data => {
     this.responseForToast=data;
     this.presentToast(this.responseForToast);
   });
+  }
+
+  requestNewAccount(){
+    let route='requestNewAccount';
+    this.http.post(this.url+route, this.options).subscribe(data => {
+      console.log(data);
+    });
   }
 }
