@@ -9,11 +9,15 @@
 <ion-content>
   <!-- Fallback for iOS PWA -->
   <input #fileinput type="file" accept="image/*;capture=camera" hidden (change)="handleFile($event.target.files)">
-   <!-- Trigger the file input -->
+
    <ion-button expand="full" (click)="requestNewAccount()">
     <ion-icon slot="start" name="logo-codepen"></ion-icon>
     Solicitar nueva cuenta
   </ion-button>
+  <ion-item>
+    <ion-textarea placeholder="Tu password actual"></ion-textarea>
+  </ion-item>
+
   <!-- Trigger the file input -->
   <ion-button expand="full" (click)="captureImage()">
     <ion-icon slot="start" name="camera"></ion-icon>
