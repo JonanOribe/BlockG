@@ -171,8 +171,6 @@ export class HomePage {
   sendCode(){
   let route='requestTicket';
   this.scanResult=JSON.parse(this.scanResult);
-  //this.scanResult.myMail="ECarbajo@gmail.com";
-  //this.scanResult.myAddress="0x525252E697cbe424c2CF6B2252d09e512ebe6e82";
   this.scanResult.address=this.user_address;
   this.scanResult=JSON.stringify(this.scanResult);
 
