@@ -21,6 +21,7 @@ export class HomePage {
   user_address = null;
   loading: HTMLIonLoadingElement = null;
   url: any="http://localhost:3000/";
+  eventPrice: any;
 
   headers = new HttpHeaders({
     'Content-Type': 'application/json'});
@@ -173,6 +174,7 @@ export class HomePage {
   this.scanResult=JSON.parse(this.scanResult);
   this.scanResult.address=this.user_address;
   this.scanResult=JSON.stringify(this.scanResult);
+  this.scanResult.price=this.eventPrice;
 
   this.http.post(this.url+route, this.scanResult, this.options).subscribe(data => {
     this.responseForToast=data;
@@ -193,7 +195,7 @@ export class HomePage {
   getEventPrice(){
     let route='getEventPrice';
     this.http.get(this.url+route, this.options).subscribe(data => {
-      console.log(data);
+      this.eventPrice=data;
      });
   }
 }
