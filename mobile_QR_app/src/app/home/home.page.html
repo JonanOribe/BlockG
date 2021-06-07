@@ -5,7 +5,7 @@
     </ion-title>
   </ion-toolbar>
 </ion-header>
- 
+
 <ion-content>
   <!-- Fallback for iOS PWA -->
   <input #fileinput type="file" accept="image/*;capture=camera" hidden (change)="handleFile($event.target.files)">
@@ -15,7 +15,7 @@
     Solicitar nueva cuenta
   </ion-button>
   <ion-item>
-    <ion-textarea placeholder="Tu cuenta actual" value={{user_address}} style="text-align: center;"></ion-textarea>
+    <ion-textarea placeholder="Tu cuenta actual" value={{address}} style="text-align: center;"></ion-textarea>
   </ion-item>
 
   <!-- Trigger the file input -->
@@ -23,29 +23,29 @@
     <ion-icon slot="start" name="camera"></ion-icon>
     Capturar código
   </ion-button>
- 
+
   <ion-button expand="full" (click)="startScan()">
     <ion-icon slot="start" name="qr-scanner"></ion-icon>
     Comenzar escaneo
   </ion-button>
- 
+
   <ion-button expand="full" (click)="reset()" color="warning" *ngIf="scanResult">
     <ion-icon slot="start" name="refresh"></ion-icon>
     Reinicio
   </ion-button>
- 
+
   <!-- Shows our camera stream -->
   <video #video [hidden]="!scanActive" width="100%"></video>
- 
+
   <!-- Used to render the camera stream images -->
   <canvas #canvas hidden></canvas>
- 
+
   <!-- Stop our scanner preview if active -->
   <ion-button expand="full" (click)="stopScan()" color="danger" *ngIf="scanActive">
     <ion-icon slot="start" name="close"></ion-icon>
     Parar escaneo
   </ion-button>
- 
+
   <ion-card *ngIf="scanResult">
     <ion-card-header>
       <ion-card-title>Código QR</ion-card-title>

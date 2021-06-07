@@ -2,7 +2,7 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { ToastController, LoadingController, Platform } from '@ionic/angular';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import jsQR from 'jsqr';
- 
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -12,13 +12,16 @@ export class HomePage {
   @ViewChild('video', { static: false }) video: ElementRef;
   @ViewChild('canvas', { static: false }) canvas: ElementRef;
   @ViewChild('fileinput', { static: false }) fileinput: ElementRef;
- 
+
   canvasElement: any;
   videoElement: any;
   canvasContext: any;
   scanActive = false;
   scanResult = null;
   user_address = null;
+  address = null;
+  password = '!@superpassword';
+  email = 'tmpMail@hgmail.com';
   loading: HTMLIonLoadingElement = null;
   url: any="http://localhost:3000/";
   eventPrice: any;
@@ -42,7 +45,7 @@ export class HomePage {
       // E.g. hide the scan functionality!
     }
   }
- 
+
   ngAfterViewInit() {
     this.canvasElement = this.canvas.nativeElement;
     this.canvasContext = this.canvasElement.getContext('2d');
@@ -50,7 +53,7 @@ export class HomePage {
     this.requestNewAccount();
     this.getEventPrice();
   }
- 
+
   async presentToast(response) {
     let toast;
     console.log(response)
@@ -79,7 +82,7 @@ export class HomePage {
   reset() {
     this.scanResult = null;
   }
- 
+
   stopScan() {
     this.scanActive = false;
   }
@@ -89,18 +92,18 @@ export class HomePage {
     const stream = await navigator.mediaDevices.getUserMedia({
       video: { facingMode: 'environment' }
     });
-   
+
     this.videoElement.srcObject = stream;
     // Required for Safari
     this.videoElement.setAttribute('playsinline', true);
-   
+
     this.loading = await this.loadingCtrl.create({});
     await this.loading.present();
-   
+
     this.videoElement.play();
     requestAnimationFrame(this.scan.bind(this));
   }
-   
+
   async scan() {
     if (this.videoElement.readyState === this.videoElement.HAVE_ENOUGH_DATA) {
       if (this.loading) {
@@ -108,10 +111,10 @@ export class HomePage {
         this.loading = null;
         this.scanActive = true;
       }
-   
+
       this.canvasElement.height = this.videoElement.videoHeight;
       this.canvasElement.width = this.videoElement.videoWidth;
-   
+
       this.canvasContext.drawImage(
         this.videoElement,
         0,
@@ -128,7 +131,7 @@ export class HomePage {
       const code = jsQR(imageData.data, imageData.width, imageData.height, {
         inversionAttempts: 'dontInvert'
       });
-   
+
       if (code) {
         this.scanActive = false;
         this.scanResult = code.data;
@@ -145,10 +148,10 @@ export class HomePage {
   captureImage() {
     this.fileinput.nativeElement.click();
   }
-   
+
   handleFile(files: FileList) {
     const file = files.item(0);
-   
+
     var img = new Image();
     img.onload = () => {
       this.canvasContext.drawImage(img, 0, 0, this.canvasElement.width, this.canvasElement.height);
@@ -161,7 +164,7 @@ export class HomePage {
       const code = jsQR(imageData.data, imageData.width, imageData.height, {
         inversionAttempts: 'dontInvert'
       });
-   
+
       if (code) {
         this.scanResult = code.data;
       }
@@ -172,9 +175,11 @@ export class HomePage {
   sendCode(){
   let route='requestTicket';
   this.scanResult=JSON.parse(this.scanResult);
-  this.scanResult.address=this.user_address;
-  this.scanResult=JSON.stringify(this.scanResult);
+  this.scanResult.address=this.address;
   this.scanResult.price=this.eventPrice;
+  this.scanResult.password=this.password;
+  this.scanResult.email=this.email;
+  this.scanResult=JSON.stringify(this.scanResult);
 
   this.http.post(this.url+route, this.scanResult, this.options).subscribe(data => {
     this.responseForToast=data;
@@ -184,11 +189,11 @@ export class HomePage {
 
   requestNewAccount(){
     let json_pass= {
-      "password" : "!@superpassword"
+      "password" : this.password
       }
     let route='requestNewAccount';
     this.http.post(this.url+route,json_pass, this.options).subscribe(data => {
-     this.user_address=data["address"];
+     this.address=data["address"];
     });
   }
 

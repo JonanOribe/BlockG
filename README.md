@@ -31,4 +31,5 @@
 
 
 <li>Para la versión móvil: <b>ng serve</b> en mobile_QR_app</li>
+<li>Para la versión móvil: Hay que generar un nuevo QR con la address del nuevo contrato del evento</li>
 <li>Para el BackEnd: <b>node app.js</b> en backEnd-node</li>
